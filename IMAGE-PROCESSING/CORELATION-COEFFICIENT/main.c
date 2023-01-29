@@ -2,38 +2,35 @@
 #include <stdlib.h>
 #include <math.h>
 
-double CorrelationCoefficient(int *image1, int *image2, int size);
+double correlationCoefficient(int *image1, int *image2, int size);
 
 int main() {
        // Open the input images
     
-    FILE *f1 = fopen("test1p6.ppm", "rb");
+    FILE *f1 = fopen("test1p3.ppm", "r");
     
-    FILE *f2 = fopen("test1p6c.ppm", "rb");
+    FILE *f2 = fopen("test1p3c.ppm", "r");
     
-    if (!f1 || !f2) {
-        printf("Error: Failed to open one of the input images\n");
-        return 1;
-    }
-
+    printf("Image 1 :");
     // Read the header of the first image
     char header[3];
     int width, height, maxValue;
     fscanf(f1, "%s %d %d %d", header, &width, &height, &maxValue);
-    printf(f1, "%s %d %d %d", header, &width, &height, &maxValue);
+    printf("%s %d %d %d\n", header, width, height, maxValue);
 
     // Make sure the image is in P6 PPM format
-    if (header[0] != 'P' || header[1] != '6') {
+    if (header[0] != 'P' || header[1] != '3') {
         printf("Error: Input image 1 is not in P6 PPM format\n");
         return 1;
     }
 
+    printf("Image 2 :");
     // Read the header of the second image
     fscanf(f2, "%s %d %d %d", header, &width, &height, &maxValue);
-    printf(f2, "%s %d %d %d", header, &width, &height, &maxValue);
+    printf("%s %d %d %d\n", header, width, height, maxValue);
 
     // Make sure the image is in P6 PPM format
-    if (header[0] != 'P' || header[1] != '6') {
+    if (header[0] != 'P' || header[1] != '3') {
         printf("Error: Input image 2 is not in P6 PPM format\n");
         return 1;
     }
@@ -63,20 +60,20 @@ int main() {
     return 0;
 }
 
-double CorrelationCoefficient(int *img1, int *img2, int size) {
+double correlationCoefficient(int *image1, int *image2, int size) {
     double mean1 = 0, mean2 = 0;
     for (int i = 0; i < size; i++) {
-        mean1 += img1[i];
-        mean2 += img2[i];
+        mean1 += image1[i];
+        mean2 += image2[i];
     }
     mean1 /= size;
     mean2 /= size;
 
     double numerator = 0, denominator1 = 0, denominator2 = 0;
     for (int i = 0; i < size; i++) {
-        numerator += (img1[i] - mean1) * (img2[i] - mean2);
-        denominator1 += pow((img1[i] - mean1), 2);
-        denominator2 += pow((img2[i] - mean2), 2);
+        numerator += (image1[i] - mean1) * (image2[i] - mean2);
+        denominator1 += pow((image1[i] - mean1), 2);
+        denominator2 += pow((image2[i] - mean2), 2);
     }
 
     return numerator / sqrt(denominator1 * denominator2);
