@@ -2,43 +2,54 @@
 #include <stdlib.h>
 
 int main() {
-
-    // Open the image file for reading.
-    FILE* fp = fopen("image.ppm", "r");
-
-    // Read the header Information.
-    char header[3];
-    int width, height, max_color;
-    fscanf(fp, "%s", header);
-    fscanf(fp, "%d %d %d", &width, &height, &max_color);
-    if (header[0] != 'P' || header[1] != '3') {
-        printf("Invalid file format.\n");
+       // Open the input images
+    
+    FILE *f1 = fopen("test1p6.ppm", "rb");
+    
+    FILE *f2 = fopen("test1p6.ppm", "rb");
+    
+    if (!f1 || !f2) {
+        printf("Error: Failed to open one of the input images\n");
         return 1;
     }
 
-    int pixels[height][width][3];
-    for (int i = 0; i < height; i++) {
-        for (int j = 0; j < width; j++) {
-            for (int k = 0; k < 3; k++) {
-                fscanf(fp, "%d", &pixels[i][j][k]);
-            }
-        }
+    // Read the header of the first image
+    char header[3];
+    int width, height, maxValue;
+    fscanf(f1, "%s %d %d %d", header, &width, &height, &maxValue);
+
+    // Make sure the image is in P6 PPM format
+    if (header[0] != 'P' || header[1] != '6') {
+        printf("Error: Input image 1 is not in P6 PPM format\n");
+        return 1;
     }
-    // Allocate memory for the image data
-    int size = width * height * 3;
-    unsigned char *data = (unsigned char *) malloc(size * sizeof(unsigned char));
 
-    // Read the image data
-    fread(data, sizeof(unsigned char), size, fp);
+    // Read the header of the second image
+    fscanf(f2, "%s %d %d %d", header, &width, &height, &maxValue);
 
-    // Close the file
-    fclose(fp);
+    // Make sure the image is in P6 PPM format
+    if (header[0] != 'P' || header[1] != '6') {
+        printf("Error: Input image 2 is not in P6 PPM format\n");
+        return 1;
+    }
 
-    // Do the Processing
-    // ...
+    // Allocate memory for the pixel data
+    unsigned char *pixels1 = malloc(width * height * 3);
+    unsigned char *pixels2 = malloc(width * height * 3);
+
+    // Read the pixel data from the input images
+    fread(pixels1, sizeof(unsigned char), width * height * 3, f1);
+    fread(pixels2, sizeof(unsigned char), width * height * 3, f2);
+
+    // Do something with the pixel data, for example, compare them
 
     // Free the memory
-    free(data);
+    free(pixels1);
+    free(pixels2);
+
+    // Close the files
+    fclose(f1);
+    fclose(f2);
 
     return 0;
 }
