@@ -5,6 +5,12 @@ int main() {
     // Declare image variables
     int width, height, max_color;
     unsigned char *image;
+    int new_width, new_height;
+    unsigned char *new_image;
+    double x_ratio, y_ratio;
+    int floor_x, floor_y;
+
+
     char str[100];
     printf("Enter the name of the file (with .ppm) :");
     gets(str);
@@ -21,6 +27,16 @@ int main() {
         image[i + 1] = avg;
         image[i + 2] = avg;
     }
+
+    for (int i = 0; i < new_height; i++) {
+      for (int j = 0; j < new_width; j++) {
+        floor_x = (int) (j * x_ratio);
+        floor_y = (int) (i * y_ratio);
+        new_image[i * new_width + j] = image[floor_y * width + floor_x];
+      }
+    }
+
+
     // Write Gray Level Sliced image to file
     FILE *out_file = fopen("output_withB.ppm", "wb");
     fprintf(out_file, "P6\n%d %d\n%d\n", width, height, max_color);
