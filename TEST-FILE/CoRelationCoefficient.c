@@ -89,9 +89,9 @@ float correlation(int x[1080][1920][3],int y[1080][1920][3],int m,int n,int k)
         yc=(float)y[i][j][k]-ya;
         num += xc*yc;
         xsf += (float)xc*xc;
-        ysf += (float)yc*yc;
+        ysf += (float)ys*ys;
     }
-  dem = sqrt(xsf*ysf);
+  dem = sqrt(xs*ys);
   cr=num/dem;
   return cr;
   }
